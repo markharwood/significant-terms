@@ -31,12 +31,5 @@ export class ChiSquare implements SignificanceHeuristic {
     return (N * Math.pow((N11 * N00 - N01 * N10), 2.0) / ((N_1)
       * (N1_) * (N0_) * (N_0)));
 
-    // const total = n11 + n10 + n01 + n00;
-
-    // const expected11 = ((n11 + n10) * (n11 + n01)) / total;
-    // if (expected11 === 0) return 0;
-
-    // const diff = n11 - expected11;
-    // return (diff * diff) / expected11;
   }
 }

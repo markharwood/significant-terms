@@ -20,7 +20,6 @@ export function detectAndSortSequences(
     topTerms: TermScore[],
     tokenStreams: string[][],
     minDocCount: number = 2
-// ): TermScore[] {
 ): string[][] {
 
     type WordSequence = {
@@ -94,13 +93,5 @@ export function detectAndSortSequences(
     allSequences.sort((a, b) => b.score - a.score);
 
     let result = allSequences.map(seq=>seq.terms)
-
-    // let result: TermScore[] = []
-    // allSequences.forEach(seq => {
-    //     seq.terms.forEach(term => {
-    //         // @ts-ignore
-    //         result.push(termScoreMap.get(term))
-    //     })
-    // })
     return result
 }
