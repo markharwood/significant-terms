@@ -1,6 +1,9 @@
 
 # @andorsearch/significant-terms
 
+[![Docs](https://img.shields.io/badge/docs-latest-blue)](https://markharwood.github.io/significant-terms/)
+
+
 A set of Elastic/OpenSearch-inspired [significance scoring](https://www.elastic.co/docs/reference/aggregations/search-aggregations-bucket-significantterms-aggregation) heuristics for discovery of terms strongly related to a set.
 
 Typically the point of identifying significant terms is to suggest terms users can use to refine searches.
