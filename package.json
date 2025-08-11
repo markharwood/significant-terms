@@ -1,0 +1,40 @@
+{
+  "name": "@andorsearch/significant-terms",
+  "version": "0.1.0",
+  "description": "A TypeScript library with significant term scoring heuristics based on Elastic/OpenSearch.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markharwood/significant-terms.git"
+  },  
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "docs": "typedoc --out docs src/index.ts",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run docs"    
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^0.34.0",
+    "typedoc": "^0.27.3"
+  },
+  "bin": {
+    "train-background-vocab": "./dist/cli/train-background-vocab.js"
+  },  
+  "files": [
+    "dist",
+    "bin",
+    "package.json",
+    "README.md"
+  ]
+}
