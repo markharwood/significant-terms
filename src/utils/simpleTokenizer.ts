@@ -1,4 +1,13 @@
 /**
+ * Regex used by `simpleTokenizer` to split input into tokens.
+ *
+ * - Matches one or more non-word characters or underscores
+ *
+ * @group Tokenization
+ */
+export const SIMPLE_TOKENIZER_SEP_RE = /[\W_]+/;
+
+/**
  * Simple tokenizer for breaking text into lowercase terms.
  *
  * - Converts the string to lowercase using `toLocaleLowerCase()`
@@ -17,8 +26,8 @@
  * @group Tokenization
  */
 export function simpleTokenizer(value: string): string[] {
-    return value
-        .toLocaleLowerCase()
-        .split(/[\W_]+/)
-        .filter(Boolean);
+  return value
+    .toLocaleLowerCase()
+    .split(SIMPLE_TOKENIZER_SEP_RE)
+    .filter(Boolean);
 }

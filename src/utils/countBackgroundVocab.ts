@@ -1,4 +1,4 @@
-// src/utils/trainBackgroundVocab.ts
+// src/utils/countBackgroundVocab.ts
 import fs from "fs";
 import path from "path";
 import { simpleTokenizer } from "./simpleTokenizer.js";
@@ -21,7 +21,7 @@ import { simpleTokenizer } from "./simpleTokenizer.js";
  *
  * @returns A small summary of what was written (useful for tests/CLI)
  */
-export function trainBackgroundVocab(
+export function countBackgroundVocab(
   inputPath: string,
   outputPath: string,
   minDocCount: number = 2

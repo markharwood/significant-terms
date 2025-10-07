@@ -14,7 +14,11 @@ function getMITerm(Nxy: number, Nx_: number, N_y: number, N: number): number {
 describe("Significance heuristics", () => {
   test("JLH", () => {
     const h = heuristics.jlh;
-    expect(h.score(10, 100, 5, 1000)).toBeGreaterThan(0);
+    expect(h.score(10, 100, 5, 1000)).toBeGreaterThan(1);
+    // Test scenario with theoretical maximum jlh scores
+    expect(h.score(100, 100, 1, 1000)).toEqual(1000 -1 ); 
+    expect(h.score(10, 10, 1, 1000000)).toEqual(1000000 -1 ); 
+
   });
 
   test("SolrRelatedness", () => {

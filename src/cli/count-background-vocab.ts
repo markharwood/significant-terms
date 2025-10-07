@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import path from "path";
-import { trainBackgroundVocab } from "../utils/trainBackgroundVocab.js";
+import { countBackgroundVocab } from "../utils/countBackgroundVocab.js";
 
-/** Parse args and run the trainer.  */
+/** Parse args and run the word counting utility.  */
 export function cli(argv: string[]) {
-  // Support both: `npx train-background-vocab ...` and `npx @scope/pkg train-background-vocab ...`
+  // Support both: `npx count-background-vocab ...` and `npx @scope/pkg count-background-vocab ...`
   const args = [...argv];
-  if (args[0]?.toLowerCase() === "train-background-vocab") args.shift();
+  if (args[0]?.toLowerCase() === "count-background-vocab") args.shift();
 
   // Parse --min-doc-count
   let minDocCount = 2;
@@ -26,13 +26,13 @@ export function cli(argv: string[]) {
 
   const [inputFile, outputFile] = args;
   if (!inputFile || !outputFile) {
-    throw new Error("Usage: train-background-vocab <input.txt> <output.json> [--min-doc-count N]");
+    throw new Error("Usage: count-background-vocab <input.txt> <output.json> [--min-doc-count N]");
   }
 
   const inputPath = path.resolve(process.cwd(), inputFile);
   const outputPath = path.resolve(process.cwd(), outputFile);
 
-  const summary = trainBackgroundVocab(inputPath, outputPath, minDocCount);
+  const summary = countBackgroundVocab(inputPath, outputPath, minDocCount);
   console.log(
     `✅ Wrote ${outputPath} (${summary.totalDocs} docs, kept ${summary.keptTerms} terms, minDocCount=${summary.minDocCount})`
   );

@@ -1,4 +1,7 @@
 
+
+export type Tokenizer = (s: string) => string[];
+
 /**
  * A mapping from term → document frequency count.
  * Used for both foreground and background corpora.

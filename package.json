@@ -29,7 +29,7 @@
     "typedoc": "^0.27.3"
   },
   "bin": {
-    "train-background-vocab": "./dist/cli/train-background-vocab.js"
+    "count-background-vocab": "./dist/cli/count-background-vocab.js"
   },  
   "files": [
     "dist",

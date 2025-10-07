@@ -31,5 +31,6 @@ export function getHeuristic(name: HeuristicName) {
 export * from "./utils/countDocFrequencies.js";
 export * from "./utils/computeSignificantTermsFromCounts.js";
 export * from "./utils/computeSignificantTerms.js";
-export * from "./utils/detectAndSortSequences.js";
+export {detectAndSortSequences} from "./utils/detectAndSortSequences.js";
 export * from "./utils/simpleTokenizer.js";
+export * from "./utils/highlight.js";

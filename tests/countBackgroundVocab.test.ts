@@ -1,14 +1,14 @@
-// tests/trainBackgroundVocab.test.ts
+// tests/countBackgroundVocab.test.ts
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs";
 import path from "path";
-import { trainBackgroundVocab } from "../src/utils/trainBackgroundVocab.js";
+import { countBackgroundVocab } from "../src/utils/countBackgroundVocab.js";
 
 const tempDir = path.join(process.cwd(), "tmp-test");
 const inputFile = path.join(tempDir, "input.txt");
 const outputFile = path.join(tempDir, "output.json");
 
-describe("trainBackgroundVocab", () => {
+describe("countBackgroundVocab", () => {
   beforeEach(() => {
     fs.mkdirSync(tempDir, { recursive: true });
     fs.writeFileSync(inputFile, "foo bar\nfoo baz\n");
@@ -19,7 +19,7 @@ describe("trainBackgroundVocab", () => {
   });
 
   it("creates a word usage JSON file", () => {
-    trainBackgroundVocab(inputFile, outputFile);
+    countBackgroundVocab(inputFile, outputFile);
     expect(fs.existsSync(outputFile)).toBe(true);
 
     const stats = JSON.parse(fs.readFileSync(outputFile, "utf-8"));

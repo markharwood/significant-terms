@@ -3,6 +3,7 @@ import { computeSignificantTerms } from "../src/utils/computeSignificantTerms";
 import { countDocFrequencies } from "../src/utils/countDocFrequencies";
 import { JLH } from "../src/heuristics/JLH";
 import type { WordUsageCounts } from "../src/types";
+import { withBgZeroFloor } from "../src/utils/computeSignificantTermsFromCounts";
 
 describe("computeSignificantTerms", () => {
   const scoringFunction = new JLH();
@@ -24,8 +25,8 @@ describe("computeSignificantTerms", () => {
       docs,
       backgroundFreqs,
       totalBackgroundDocs,
-      3,
-      scoringFunction
+      
+      { topN:3, scoringFunction}
     );
 
     expect(Array.isArray(results)).toBe(true);
@@ -34,35 +35,47 @@ describe("computeSignificantTerms", () => {
     expect(results[0]).toHaveProperty("score");
   });
 
-  it("allows foreground terms not in background when isSubset=false", () => {
+  it("raw jlh allows foreground terms not in background but does not discover them", () => {
+
     const docs = [["dragonfruit"], ["dragonfruit", "apple"]];
     const results = computeSignificantTerms(
       docs,
       backgroundFreqs,
       totalBackgroundDocs,
-      2,
-      scoringFunction,
-      false // not a subset
+      { topN:2, scoringFunction}
     );
-
     const terms = results.map(r => r.term);
-    expect(terms).toContain("dragonfruit");
+    expect(results.length).toEqual(0);
   });
 
-  it("throws error when isSubset=true and fgCount > bgCount", () => {
-    const docs = [["apple"], ["apple"], ["apple"]]; // fgCount = 3
-    const badBackground: WordUsageCounts = { apple: 2 }; // bgCount = 2
+  it("wrapped jlh allows foreground terms not in background and does discover them", () => {
 
-    expect(() =>
-      computeSignificantTerms(
-        docs,
-        badBackground,
-        totalBackgroundDocs,
-        2,
-        scoringFunction,
-        true
-      )
-    ).toThrow(/Foreground count.*exceeds background count/);
+    const docs = [["dragonfruit"], ["dragonfruit", "apple"]];
+    const results = computeSignificantTerms(
+      docs,
+      backgroundFreqs,
+      totalBackgroundDocs,
+      { topN:2, scoringFunction:withBgZeroFloor(scoringFunction)}
+    );
+    const terms = results.map(r => r.term);
+    expect(results.length).toEqual(1);
+    expect(terms).toContain("dragonfruit");
+
+  });
+
+    it("Default (solr wrapped with bgZeroFloor) allows foreground terms not in background and does discover them", () => {
+
+    const docs = [["dragonfruit"], ["dragonfruit", "apple"]];
+    const results = computeSignificantTerms(
+      docs,
+      backgroundFreqs,
+      totalBackgroundDocs,
+      { topN:2}
+    );
+    const terms = results.map(r => r.term);
+    expect(results.length).toEqual(1);
+    expect(terms).toContain("dragonfruit");
+
   });
 
   it("filters out terms below minDocCount", () => {
@@ -71,10 +84,7 @@ describe("computeSignificantTerms", () => {
       docs,
       backgroundFreqs,
       totalBackgroundDocs,
-      3,
-      scoringFunction,
-      true,
-      2 // require at least 2 docs
+      { topN:2, scoringFunction, minDocCount:2}
     );
     expect(results.length).toBe(0);
   });

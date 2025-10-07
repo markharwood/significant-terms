@@ -1,6 +1,6 @@
 import type { WordUsageCounts, TermScore, SignificanceHeuristic } from "../types.js";
 import { countDocFrequencies } from "./countDocFrequencies.js";
-import { computeSignificantTermsFromCounts } from "./computeSignificantTermsFromCounts.js";
+import { computeSignificantTermsFromCounts, SignificanceFindingOptions } from "./computeSignificantTermsFromCounts.js";
 
 /**
  * Convenience wrapper for `computeSignificantTermsFromCounts` that
@@ -8,25 +8,23 @@ import { computeSignificantTermsFromCounts } from "./computeSignificantTermsFrom
  *
  * @group Significant Terms
  *
+ * @param foregroundDocs - Array of foreground documents - each doc is represented as an array of tokens (typically words)
+ * @param bgCounts - Background document frequency map for words
+ * @param totalBackgroundDocs - Total number of documents in the background set
+ * @param options - Same as computeSignificantTermsFromCounts
  */
 export function computeSignificantTerms(
-  docs: string[][],
+  foregroundDocs: string[][],
   bgCounts: WordUsageCounts,
   totalBackgroundDocs: number,
-  topN: number,
-  scoringFunction: SignificanceHeuristic,
-  isSubset: boolean = true,
-  minDocCount: number = 2
+  options: SignificanceFindingOptions = {}
 ): TermScore[] {
-  const fgCounts = countDocFrequencies(docs);
+  const fgCounts = countDocFrequencies(foregroundDocs);
   return computeSignificantTermsFromCounts(
     fgCounts,
-    docs.length,
+    foregroundDocs.length,
     bgCounts,
     totalBackgroundDocs,
-    topN,
-    scoringFunction,
-    isSubset,
-    minDocCount
+    options
   );
 }
