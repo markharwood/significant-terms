@@ -40,7 +40,7 @@ The words used in each cluster are compared to word usage in all other clusters 
 - Solr Relatednesss
 
 
-## Usage
+## Low-level usage
 
 ```ts
 import { getHeuristic } from "@andorsearch/significance-heuristics";
@@ -57,3 +57,50 @@ interface SignificanceHeuristic {
   score(subsetFreq: number, subsetSize: number, supersetFreq: number, supersetSize: number): number;
 }
 ```
+
+## Usage with search results
+
+Significant keywords can be detected in search results. These can be shown as suggestions to refine queries e.g
+to add keyword "h5n1" to a search for "bird flu".
+
+The language used in search results needs to be compared with some record of general word use we call "the background".
+A background is simply a list of words and how frequently they each occur.
+You can get a background of word use from a couple of places:
+
+- **Download** a pre-built background [e.g. this English background](https://gist.github.com/markharwood/10c160b19dabe35ba6531410747ef4f0) **or**
+- **Generate** your own background
+  - **From text**
+    The significant terms package contains a utility to count the words in a text file
+    ```ts
+    npx @andorsearch/significant-terms count-background-vocab 'MyExampleTextFile.txt' MyBackgroundWordStats.json
+    ``` **or**
+  - **From your elasticsearch/opensearch index**:
+    run [a version of this query](https://gist.github.com/markharwood/74bb6b8523f6a5746b1b758da2a5372e) to generate a list of words from a randomised selection of content in your choice of index/field.
+
+Once you have a background it can be used for comparison with search results:
+
+```ts
+import { computeSignificantTerms, detectAndSortSequences, simpleTokenizer, WordUsageCounts } from "@andorsearch/significant-terms";
+
+// ==== Your choice of background ====
+// const backgroundWordStats:WordUsageCounts
+// const backgroundCorpusSize:number
+
+function findSignificantWordsOrPhrases(searchResultTexts: string[]) {
+    // Tokenise the text found in search results
+    let tokenStreams = searchResultTexts.map((textValue) => simpleTokenizer(textValue))
+
+    //Find the significant words compared to the background
+    const significantWords = computeSignificantTerms(
+        tokenStreams,
+        backgroundWordStats,
+        backgroundCorpusSize
+    );
+    // Optionally, examine how the significant words are placed in the text to identify word pairs e.g. "Mitt" + "Romney"
+    let significantWordsOrPhrases = detectAndSortSequences(significantWords, tokenStreams)
+
+    // Display the words or phrases as a comma delimited list.
+    const summary = significantWordsOrPhrases.map(termOrPhrase => termOrPhrase.join(" ")).join(", ");
+    console.log(summary)
+}``` 
+
