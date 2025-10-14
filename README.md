@@ -102,5 +102,6 @@ function findSignificantWordsOrPhrases(searchResultTexts: string[]) {
     // Display the words or phrases as a comma delimited list.
     const summary = significantWordsOrPhrases.map(termOrPhrase => termOrPhrase.join(" ")).join(", ");
     console.log(summary)
-}``` 
+}
+``` 
 
